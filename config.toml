@@ -1,0 +1,54 @@
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = ''
+theme = 'hugo-coder'
+
+paginate = 20
+
+pygmentsstyle = "bw"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+disqusShortname = "calexo"
+
+[params]
+  author = "calexo"
+  # info = "General"
+  description = "Calexo"
+  keywords = "Proofreading, Copyediting, Editing, Grammar, Spelling, Punctuation, Accuracy, Attention to detail, Language skills, Writing skills, Translation, Bilingual, Language skills, Interpreter, Localization, Multilingual, Proofreading, Editing, Interpretation, Language proficiency, Star Atlas, Metaverse, NFTs, Crypto, Gaming, Virtual worlds, Blockchain, Spaceships, Exploration, Space economy, Storytelling, Creative writing, Children's stories, Fiction, Oral storytelling, Narration, Public speaking, Literature, Imagination, Story development, Writing, Author, Creative writing, Fiction, Non-fiction, Book writing, Freelance writing, Ghostwriting, Content creation, Manuscript development"
+
+  since = 2023
+
+  enableTwemoji = true
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+
+  # customCSS = ["css/custom.css"]
+  # customSCSS = ["scss/custom.scss"]
+  # customJS = ["js/custom.js"]
+
+  [taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
+
+# Social links
+[[params.social]]
+  name = "Twitter"
+  icon = "fa fa-twitter fa-2x"
+  weight = 3
+  url = "https://twitter.com/calexo_/"
+
+[[params.social]]
+  name = "Instagram"
+  icon = "fa fa-instagram fa-2x"
+  weight = 3
+  url = "https://www.instagram.com/calexo_/"
+
+  [[params.social]]
+  name = "Medium"
+  icon = "fa fa-medium fa-2x"
+  weight = 3
+  url = "https://medium.com/@calexo_"
