@@ -36,10 +36,10 @@ disqusShortname = "calexo"
 
 # Social links
 [[params.social]]
-  name = "Twitter"
-  icon = "fa fa-twitter fa-2x"
+  name = "Telegram"
+  icon = "fa fa-paper-plane fa-2x"
   weight = 3
-  url = "https://twitter.com/calexo_/"
+  url = "https://t.me/calexo"
 
 [[params.social]]
   name = "Instagram"
