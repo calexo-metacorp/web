@@ -42,13 +42,7 @@ disqusShortname = "calexo"
   url = "https://t.me/calexo"
 
 [[params.social]]
-  name = "Instagram"
-  icon = "fa fa-instagram fa-2x"
+  name = "Whatsapp"
+  icon = "fa fa-whatsapp fa-2x"
   weight = 3
-  url = "https://www.instagram.com/calexo_/"
-
-  [[params.social]]
-  name = "Medium"
-  icon = "fa fa-medium fa-2x"
-  weight = 3
-  url = "https://medium.com/@calexo_"
+  url = "https://wa.me/message/DLFO4QZRVPMKN1"
