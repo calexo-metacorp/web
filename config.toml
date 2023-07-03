@@ -1,4 +1,4 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://calexo-metacorp.github.io/web/'
 languageCode = 'en-us'
 title = ''
 theme = 'hugo-coder'
@@ -46,3 +46,7 @@ disqusShortname = "calexo"
   icon = "fa fa-whatsapp fa-2x"
   weight = 3
   url = "https://wa.me/message/DLFO4QZRVPMKN1"
+
+[[routes]]
+  path = "/budget-request"
+  file = "budget-request.html"
