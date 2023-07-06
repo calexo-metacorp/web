@@ -49,4 +49,4 @@ disqusShortname = "calexo"
 
 [[routes]]
   path = "/budget-request"
-  file = "budget-request.html"
+  file = "https://form.jotform.com/231858482246060"
