@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>64-Tetrahedron Grid · Cuboctahedral Vector Equilibrium</title>
+<meta name="description" content="A mathematical artifact: 64 regular tetrahedra arranged so their innermost vertices form a central cuboctahedral vector-equilibrium nucleus that balances the array.">
+<style>
+  :root{ --bg:#0a0c12; --fg:#e8ecf4; --mut:#8b93a7; --line:#2a3142;
+         --gold:#f5c451; --cyan:#4fd0e0; --tet:#7aa2ff; --octa:#b07cff; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+            font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overscroll-behavior:none}
+  #stage{position:fixed;inset:0;display:block;touch-action:none;cursor:grab}
+  #stage:active{cursor:grabbing}
+  .panel{position:fixed;background:rgba(14,18,28,.82);border:1px solid var(--line);
+         border-radius:10px;backdrop-filter:blur(8px);padding:12px 14px}
+  #hud{top:12px;left:12px;max-width:340px}
+  #hud h1{font-size:14px;margin:0 0 2px;letter-spacing:.2px}
+  #hud p{margin:0 0 10px;color:var(--mut);font-size:12px}
+  #hud .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  label.tog{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);
+            border-radius:7px;cursor:pointer;user-select:none;font-size:12px}
+  label.tog input{accent-color:var(--cyan)}
+  .sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+  #facts{top:12px;right:12px;max-width:300px;font-size:12px}
+  #facts h2{font-size:12px;margin:0 0 6px;color:var(--cyan);letter-spacing:.3px;text-transform:uppercase}
+  #facts dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0}
+  #facts dt{color:var(--mut)}
+  #facts dd{margin:0;text-align:right}
+  #checks{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;display:none}
+  #checks .ck{display:flex;justify-content:space-between;gap:8px}
+  #checks .ck b{color:var(--mut);font-weight:400}
+  .ok{color:#5ee0a0}.bad{color:#ff6b6b}
+  #toggleChecks{cursor:pointer;color:var(--cyan);font-size:11px;margin-top:6px;display:inline-block;border-bottom:1px dotted var(--cyan)}
+  #help{bottom:12px;left:12px;color:var(--mut);font-size:11px;background:transparent;border:0}
+  a{color:var(--cyan)}
+  @media (max-width:760px){ #facts{display:none} #hud{max-width:calc(100% - 24px)} }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<div id="hud" class="panel">
+  <h1>64-Tetrahedron Grid</h1>
+  <p>Eight star tetrahedra → 64 regular tetrahedra around a cuboctahedral
+     <em>vector&nbsp;equilibrium</em> nucleus (radius = edge).</p>
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="t-tet" checked><span class="sw" style="background:var(--tet)"></span>64 tetraedros</label>
+    <label class="tog"><input type="checkbox" id="t-nuc" checked><span class="sw" style="background:var(--gold)"></span>Cuboctaedro núcleo</label>
+    <label class="tog"><input type="checkbox" id="t-rad" checked><span class="sw" style="background:var(--cyan)"></span>12 radiales</label>
+    <label class="tog"><input type="checkbox" id="t-oct"><span class="sw" style="background:var(--octa)"></span>8 octaedros</label>
+    <label class="tog"><input type="checkbox" id="t-solid"><span class="sw" style="background:#fff"></span>relleno</label>
+    <label class="tog"><input type="checkbox" id="t-spin" checked>girar</label>
+  </div>
+</div>
+
+<div id="facts" class="panel">
+  <h2>Artefacto</h2>
+  <dl>
+    <dt>red</dt><dd>FCC / IVM</dd>
+    <dt>arista</dt><dd>√2</dd>
+    <dt>tetraedros</dt><dd>64</dd>
+    <dt>estrellas</dt><dd>8 × 8</dd>
+    <dt>núcleo</dt><dd>cuboctaedro</dd>
+    <dt>radio = arista</dt><dd>√2 = √2</dd>
+    <dt>vol. 64 tetra</dt><dd>64/3</dd>
+    <dt>vol. núcleo</dt><dd>20/3</dd>
+    <dt>simetría</dt><dd>O<sub>h</sub> (48)</dd>
+    <dt>Σ vértices</dt><dd>0 (balance)</dd>
+  </dl>
+  <span id="toggleChecks">verificación ▾</span>
+  <div id="checks"></div>
+</div>
+
+<div id="help" class="panel">arrastrar = rotar · rueda = zoom</div>
+
+<script>
+//=====================================================================
+//  GEOMETRY  (identical construction to tetra64/geometry.mjs)
+//=====================================================================
+const EDGE = Math.SQRT2;
+const Eb = [[1,0,0],[0,1,0],[0,0,1]];
+const SIGNS=[]; for(const x of[-1,1])for(const y of[-1,1])for(const z of[-1,1])SIGNS.push([x,y,z]);
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const scl=(a,k)=>[a[0]*k,a[1]*k,a[2]*k];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const len=a=>Math.hypot(a[0],a[1],a[2]);
+const dist2=(a,b)=>{const d=sub(a,b);return dot(d,d);};
+const cen=p=>scl(p.reduce(add,[0,0,0]),1/p.length);
+const k6=p=>p.map(x=>(Object.is(x,-0)?0:x).toFixed(6)).join(",");
+
+function build(){
+  const stellaCenters=SIGNS.map(s=>[...s]);
+  const tetrahedra=[], octahedra=[];
+  stellaCenters.forEach((P,si)=>{
+    const ov=[]; for(const e of Eb){ov.push(add(P,e));ov.push(sub(P,e));}
+    octahedra.push({stella:si,vertices:ov});
+    SIGNS.forEach(s=>{
+      const apex=add(P,s);
+      const base=[add(P,scl(Eb[0],s[0])),add(P,scl(Eb[1],s[1])),add(P,scl(Eb[2],s[2]))];
+      const v=[apex,...base];
+      tetrahedra.push({id:tetrahedra.length,stella:si,vertices:v,centroid:cen(v)});
+    });
+  });
+  // nucleus: perm(0,+-1,+-1)
+  const ve=[];
+  for(const a of[-1,1])for(const b of[-1,1]){ve.push([0,a,b]);ve.push([a,0,b]);ve.push([a,b,0]);}
+  const edges=[];
+  for(let i=0;i<ve.length;i++)for(let j=i+1;j<ve.length;j++)
+    if(Math.abs(dist2(ve[i],ve[j])-2)<1e-9)edges.push([i,j]);
+  const find=p=>ve.findIndex(v=>k6(v)===k6(p));
+  const triFaces=SIGNS.map(s=>[find([0,s[1],s[2]]),find([s[0],0,s[2]]),find([s[0],s[1],0])]);
+  const sqFaces=[];
+  for(let ax=0;ax<3;ax++)for(const sg of[-1,1]){
+    const idx=ve.map((v,i)=>[v,i]).filter(([v])=>v[ax]===sg).map(([,i])=>i);
+    const c=cen(idx.map(i=>ve[i])), ref=sub(ve[idx[0]],c), n=Eb[ax];
+    const ang=i=>{const w=sub(ve[i],c);return Math.atan2(dot(cross(ref,w),n),dot(ref,w));};
+    idx.sort((p,q)=>ang(p)-ang(q)); sqFaces.push(idx);
+  }
+  return {stellaCenters,tetrahedra,octahedra,ve:{vertices:ve,edges,triFaces,sqFaces}};
+}
+
+function verify(M){
+  const eq=(a,b,t=1e-9)=>Math.abs(a-b)<t, vz=a=>eq(a[0],0)&&eq(a[1],0)&&eq(a[2],0);
+  const c={};
+  c["64 tetraedros"]=M.tetrahedra.length===64;
+  let reg=true; for(const t of M.tetrahedra){const v=t.vertices;
+    for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)if(!eq(dist2(v[i],v[j]),2))reg=false;}
+  c["tetraedros regulares (√2)"]=reg;
+  c["núcleo: 12 vértices"]=M.ve.vertices.length===12;
+  c["radio = arista (equilibrio)"]=M.ve.vertices.every(v=>eq(len(v),EDGE));
+  c["núcleo: 24 aristas"]=M.ve.edges.length===24;
+  c["núcleo: 8 tri + 6 cuad"]=M.ve.triFaces.length===8&&M.ve.sqFaces.length===6;
+  c["Σ vértices = 0"]=vz(M.ve.vertices.reduce(add,[0,0,0]));
+  c["centroide = origen"]=vz(cen(M.tetrahedra.map(t=>t.centroid)));
+  c["cada vértice ↔ 2 estrellas"]=M.ve.vertices.every(v=>
+    M.stellaCenters.filter(P=>eq(dist2(P,v),1)).length===2);
+  return c;
+}
+
+const MODEL=build(), CHECKS=verify(MODEL);
+
+//=====================================================================
+//  RENDERER  (small painter's-algorithm software 3D engine)
+//=====================================================================
+const cv=document.getElementById("stage"), ctx=cv.getContext("2d");
+let W,H,DPR;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);}
+addEventListener("resize",resize);
+
+let yaw=0.6, pitch=-0.5, zoom=1, spin=true;
+const LIGHT=(()=>{const l=[0.35,0.55,0.9];const m=len(l);return scl(l,1/m);})();
+
+function rot(p){
+  const cy=Math.cos(yaw),sy=Math.sin(yaw),cx=Math.cos(pitch),sx=Math.sin(pitch);
+  let x=p[0]*cy+p[2]*sy, z=-p[0]*sy+p[2]*cy, y=p[1];
+  let y2=y*cx-z*sx, z2=y*sx+z*cx;
+  return [x,y2,z2];
+}
+function project(p){
+  const r=rot(p), f=7, persp=f/(f-r[2]);
+  const s=Math.min(W,H)*0.13*zoom*persp;
+  return {x:W/2+r[0]*s, y:H/2-r[1]*s, z:r[2]};
+}
+
+const COL={tet:[122,162,255], nuc:[245,196,81], oct:[176,124,255], rad:[79,208,224]};
+function shade(rgb,verts3,alpha,emissive=0.34){
+  const n=cross(sub(verts3[1],verts3[0]),sub(verts3[2],verts3[0]));
+  const m=len(n)||1; const nn=[n[0]/m,n[1]/m,n[2]/m];
+  const lit=Math.abs(dot(nn,LIGHT));
+  const k=emissive+(1-emissive)*lit;
+  return `rgba(${Math.round(rgb[0]*k)},${Math.round(rgb[1]*k)},${Math.round(rgb[2]*k)},${alpha})`;
+}
+
+const TET_FACES=[[0,1,2],[0,1,3],[0,2,3],[1,2,3]];
+const OCT_EDGES=[[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,4],[4,3],[3,5],[5,2]];
+
+function frame(){
+  if(spin){yaw+=0.0045;}
+  ctx.clearRect(0,0,W,H);
+  const items=[]; // {z, draw()}
+  const show={tet:t_tet.checked,nuc:t_nuc.checked,rad:t_rad.checked,oct:t_oct.checked,solid:t_solid.checked};
+
+  // rotate-transform cache
+  const R=p=>rot(p);
+
+  // ---- 64 tetrahedra ----
+  if(show.tet){
+    for(const t of MODEL.tetrahedra){
+      const P=t.vertices.map(project), R3=t.vertices.map(R);
+      if(show.solid){
+        for(const f of TET_FACES){
+          const v3=[R3[f[0]],R3[f[1]],R3[f[2]]];
+          const z=(v3[0][2]+v3[1][2]+v3[2][2])/3;
+          const p2=[P[f[0]],P[f[1]],P[f[2]]];
+          items.push({z,draw(){
+            ctx.beginPath();ctx.moveTo(p2[0].x,p2[0].y);ctx.lineTo(p2[1].x,p2[1].y);ctx.lineTo(p2[2].x,p2[2].y);ctx.closePath();
+            ctx.fillStyle=shade(COL.tet,v3,0.16);ctx.fill();
+            ctx.strokeStyle="rgba(122,162,255,0.5)";ctx.lineWidth=0.6;ctx.stroke();
+          }});
+        }
+      }else{
+        const z=(R3[0][2]+R3[1][2]+R3[2][2]+R3[3][2])/4;
+        items.push({z,draw(){
+          ctx.strokeStyle="rgba(122,162,255,0.45)";ctx.lineWidth=0.7;ctx.beginPath();
+          const E=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
+          for(const[a,b]of E){ctx.moveTo(P[a].x,P[a].y);ctx.lineTo(P[b].x,P[b].y);}
+          ctx.stroke();
+        }});
+      }
+    }
+  }
+
+  // ---- 8 octahedra (wire) ----
+  if(show.oct){
+    for(const o of MODEL.octahedra){
+      const P=o.vertices.map(project), R3=o.vertices.map(R);
+      const z=cen(R3)[2];
+      items.push({z,draw(){
+        ctx.strokeStyle="rgba(176,124,255,0.5)";ctx.lineWidth=0.7;ctx.beginPath();
+        for(const[a,b]of OCT_EDGES){ctx.moveTo(P[a].x,P[a].y);ctx.lineTo(P[b].x,P[b].y);}
+        ctx.stroke();
+      }});
+    }
+  }
+
+  // ---- nucleus cuboctahedron (filled, bright) ----
+  if(show.nuc){
+    const V=MODEL.ve.vertices, P=V.map(project), R3=V.map(R);
+    const faces=[...MODEL.ve.triFaces.map(f=>({f,sq:false})),...MODEL.ve.sqFaces.map(f=>({f,sq:true}))];
+    for(const{f,sq}of faces){
+      const v3=f.map(i=>R3[i]); const z=cen(v3)[2]+0.001;
+      const p2=f.map(i=>P[i]);
+      items.push({z,draw(){
+        ctx.beginPath();ctx.moveTo(p2[0].x,p2[0].y);for(let i=1;i<p2.length;i++)ctx.lineTo(p2[i].x,p2[i].y);ctx.closePath();
+        ctx.fillStyle=shade(COL.nuc,v3,sq?0.30:0.42,0.4);ctx.fill();
+        ctx.strokeStyle="rgba(245,196,81,0.95)";ctx.lineWidth=1.4;ctx.stroke();
+      }});
+    }
+    // vertices
+    for(let i=0;i<V.length;i++){const z=R3[i][2];const p=P[i];
+      items.push({z:z+0.002,draw(){ctx.fillStyle="#ffe49a";ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fill();}});}
+  }
+
+  // ---- 12 radial equilibrium vectors ----
+  if(show.rad){
+    const o=project([0,0,0]);
+    for(const v of MODEL.ve.vertices){
+      const p=project(v), z=(rot(v)[2])/2;
+      items.push({z,draw(){
+        ctx.strokeStyle="rgba(79,208,224,0.85)";ctx.lineWidth=1.1;
+        ctx.beginPath();ctx.moveTo(o.x,o.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+      }});
+    }
+    items.push({z:99,draw(){ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(o.x,o.y,3.4,0,7);ctx.fill();}});
+  }
+
+  items.sort((a,b)=>a.z-b.z); // far -> near
+  for(const it of items)it.draw();
+  requestAnimationFrame(frame);
+}
+
+//------- interaction -------
+let drag=false,lx=0,ly=0;
+cv.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;ly=e.clientY;cv.setPointerCapture(e.pointerId);});
+cv.addEventListener("pointerup",()=>drag=false);
+cv.addEventListener("pointermove",e=>{if(!drag)return;
+  yaw+=(e.clientX-lx)*0.008;pitch+=(e.clientY-ly)*0.008;
+  pitch=Math.max(-1.5,Math.min(1.5,pitch));lx=e.clientX;ly=e.clientY;});
+cv.addEventListener("wheel",e=>{e.preventDefault();zoom*=Math.exp(-e.deltaY*0.0012);
+  zoom=Math.max(0.4,Math.min(4,zoom));},{passive:false});
+
+const t_tet=document.getElementById("t-tet"),t_nuc=document.getElementById("t-nuc"),
+      t_rad=document.getElementById("t-rad"),t_oct=document.getElementById("t-oct"),
+      t_solid=document.getElementById("t-solid"),t_spin=document.getElementById("t-spin");
+t_spin.addEventListener("change",()=>spin=t_spin.checked);
+
+// verification panel
+const cdiv=document.getElementById("checks");
+cdiv.innerHTML=Object.entries(CHECKS).map(([k,v])=>
+  `<div class="ck"><b>${k}</b><span class="${v?'ok':'bad'}">${v?'✓':'✗'}</span></div>`).join("");
+document.getElementById("toggleChecks").addEventListener("click",()=>{
+  cdiv.style.display=cdiv.style.display==="block"?"none":"block";});
+
+resize();frame();
+</script>
+</body>
+</html>
