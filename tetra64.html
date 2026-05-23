@@ -148,7 +148,9 @@ const MODEL=build(), CHECKS=verify(MODEL);
 //=====================================================================
 const cv=document.getElementById("stage"), ctx=cv.getContext("2d");
 let W,H,DPR;
-function resize(){DPR=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  cv.style.width=W+"px";cv.style.height=H+"px";
   cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);}
 addEventListener("resize",resize);
 
