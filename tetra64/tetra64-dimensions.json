@@ -1,0 +1,190 @@
+{
+  "generated_at": "2026-06-03T17:20:47.599Z",
+  "shells": [
+    {
+      "name": "S0",
+      "r": 0,
+      "r2": 0,
+      "count": 1
+    },
+    {
+      "name": "S1",
+      "r": 1.414214,
+      "r2": 2,
+      "count": 12
+    },
+    {
+      "name": "S2",
+      "r": 2,
+      "r2": 4,
+      "count": 6
+    },
+    {
+      "name": "S3",
+      "r": 2.44949,
+      "r2": 6,
+      "count": 24
+    },
+    {
+      "name": "S4",
+      "r": 2.828427,
+      "r2": 8,
+      "count": 12
+    },
+    {
+      "name": "S5",
+      "r": 3.464102,
+      "r2": 12,
+      "count": 8
+    }
+  ],
+  "chirality": {
+    "plus": 32,
+    "minus": 32
+  },
+  "edges": {
+    "count": 240,
+    "multiplicity_histogram": {
+      "1": 96,
+      "2": 144
+    }
+  },
+  "dual_graphs": {
+    "face_sharing": {
+      "edges": 0,
+      "cycles": -63
+    },
+    "edge_sharing": {
+      "edges": 144,
+      "cycles": 81
+    },
+    "vertex_sharing": {
+      "edges": 412,
+      "cycles": 349
+    },
+    "tetra_octa": {
+      "incidences": 64
+    }
+  },
+  "antipodal": {
+    "vertex_pairs": 31,
+    "self": 1,
+    "tetra_pairs": 32
+  },
+  "boundary_matrices": [
+    {
+      "name": "B1: unsigned edges x tetra",
+      "rows": 240,
+      "cols": 64,
+      "rank": 64,
+      "kerColT": 176
+    },
+    {
+      "name": "B2: signed-by-chirality",
+      "rows": 240,
+      "cols": 64,
+      "rank": 64,
+      "kerColT": 176
+    },
+    {
+      "name": "B3: graph boundary d1 (V x E)",
+      "rows": 63,
+      "cols": 240,
+      "rank": 62,
+      "kerColT": 178
+    }
+  ],
+  "orbits": {
+    "vertices_Oh": [
+      8,
+      24,
+      12,
+      12,
+      6,
+      1
+    ],
+    "vertices_O": [
+      8,
+      24,
+      12,
+      12,
+      6,
+      1
+    ],
+    "tetra_Oh": [
+      8,
+      24,
+      24,
+      8
+    ],
+    "tetra_O": [
+      8,
+      24,
+      24,
+      8
+    ]
+  },
+  "claims": {
+    "R^64_tetra (tetrahedra)": {
+      "claim": 64,
+      "got": 64
+    },
+    "R^63_vertex (unique tetra vertices)": {
+      "claim": 63,
+      "got": 63
+    },
+    "chirality split 32+ / 32-": {
+      "claim": "32 / 32",
+      "got": "32 / 32"
+    },
+    "Shell 1 (cuboctahedron, VE) size": {
+      "claim": 12,
+      "got": 12
+    },
+    "shells S0..S5 count": {
+      "claim": 6,
+      "got": 6
+    },
+    "R^240_edge (bulk edges, |e|=sqrt 2)": {
+      "claim": 240,
+      "got": 240
+    },
+    "R^144_dual_edge (dual graph edges)": {
+      "claim": 144,
+      "gotByDef": {
+        "face-sharing": 0,
+        "edge-sharing": 144,
+        "vertex-sharing": 412,
+        "tetra<->octa": 64
+      }
+    },
+    "R^81_dual_cycle (independent cycles)": {
+      "claim": 81,
+      "gotByDef": {
+        "from face-sharing": -63,
+        "from edge-sharing": 81,
+        "from vertex-sharing": 349
+      }
+    },
+    "ker(B^T)_64TG dim = 178": {
+      "claim": 178,
+      "gotByDef": {
+        "B1: unsigned edges x tetra": 176,
+        "B2: signed-by-chirality": 176,
+        "B3: graph boundary d1 (V x E)": 178
+      }
+    },
+    "O_h orbits on 63 vertices = 6 shells": {
+      "claim": 6,
+      "got": 6
+    },
+    "tetra orbits under O_h": {
+      "claim": "(no explicit claim)",
+      "got": "4 orbits, sizes [8,24,24,8]"
+    },
+    "tetra orbits under O": {
+      "claim": "(no explicit claim)",
+      "got": "4 orbits, sizes [8,24,24,8]"
+    }
+  }
+}
