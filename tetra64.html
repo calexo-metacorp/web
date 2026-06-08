@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>64-Tetrahedron Grid · Cuboctahedral Vector Equilibrium</title>
+<meta name="description" content="64 regular tetrahedra around a cuboctahedral vector-equilibrium nucleus, with chirality 32+/32-, shells S0..S5, dual graph, antipodal pairs, and live dimensional verification.">
+<style>
+  :root{ --bg:#0a0c12; --fg:#e8ecf4; --mut:#8b93a7; --line:#2a3142;
+         --gold:#f5c451; --cyan:#4fd0e0; --tet:#7aa2ff; --octa:#b07cff;
+         --chirP:#ff8c5a; --chirM:#5ec0ff;
+         --bulkE:#3f475a; --dual:#6fdc8c; --anti:#ff6fb5; --circ:#c894ff;
+         --S0:#ffffff; --S1:#f5c451; --S2:#4fd0e0; --S3:#ff7ad9; --S4:#7be094; --S5:#ffae5a; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+            font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overscroll-behavior:none}
+  #stage{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+  #stage:active{cursor:grabbing}
+  .panel{position:fixed;background:rgba(14,18,28,.84);border:1px solid var(--line);
+         border-radius:10px;backdrop-filter:blur(8px);padding:11px 13px}
+  #hud{top:12px;left:12px;max-width:380px}
+  #hud h1{font-size:13px;margin:0 0 2px;letter-spacing:.2px}
+  #hud p{margin:0 0 9px;color:var(--mut);font-size:11.5px}
+  #hud .section{font-size:10px;color:var(--mut);letter-spacing:.4px;text-transform:uppercase;margin:8px 0 4px}
+  #hud .row{display:flex;gap:6px;flex-wrap:wrap}
+  label.tog{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border:1px solid var(--line);
+            border-radius:6px;cursor:pointer;user-select:none;font-size:11px}
+  label.tog input{accent-color:var(--cyan)}
+  .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .sw.dot{border-radius:50%}
+  #facts{top:12px;right:12px;max-width:320px;font-size:11.5px}
+  #facts h2{font-size:11px;margin:0 0 6px;color:var(--cyan);letter-spacing:.3px;text-transform:uppercase}
+  #facts dl{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;margin:0}
+  #facts dt{color:var(--mut)}
+  #facts dd{margin:0;text-align:right}
+  #facts dd.ok::after{content:" \2713";color:#5ee0a0;margin-left:4px}
+  #facts dd.bad::after{content:" \2717";color:#ff6b6b;margin-left:4px}
+  #facts .group{margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}
+  #facts .group-title{font-size:10px;color:var(--mut);letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
+  #help{bottom:12px;left:12px;color:var(--mut);font-size:11px;background:transparent;border:0}
+  .shell-leg{display:inline-flex;align-items:center;gap:3px;margin-right:6px;font-size:10.5px}
+  @media (max-width:900px){ #facts{display:none} #hud{max-width:calc(100% - 24px)} }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<div id="hud" class="panel">
+  <h1>64-Tetrahedron Grid · Vector Equilibrium</h1>
+  <p>8 tetraedros estrella - 64 tetraedros regulares en torno a un cuboctaedro nuclear (radio = arista).</p>
+
+  <div class="section">Capas basicas</div>
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="t-tet" checked><span class="sw" style="background:var(--tet)"></span>tetraedros</label>
+    <label class="tog"><input type="checkbox" id="t-nuc" checked><span class="sw" style="background:var(--gold)"></span>nucleo VE</label>
+    <label class="tog"><input type="checkbox" id="t-rad" checked><span class="sw" style="background:var(--cyan)"></span>12 radiales</label>
+    <label class="tog"><input type="checkbox" id="t-oct"><span class="sw" style="background:var(--octa)"></span>8 octaedros</label>
+    <label class="tog"><input type="checkbox" id="t-solid">relleno</label>
+    <label class="tog"><input type="checkbox" id="t-spin" checked>girar</label>
+  </div>
+
+  <div class="section">Capas extendidas</div>
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="t-chir"><span class="sw" style="background:linear-gradient(90deg,var(--chirP),var(--chirM))"></span>quiralidad 32+/32-</label>
+    <label class="tog"><input type="checkbox" id="t-shell"><span class="sw dot" style="background:var(--S1)"></span>cascarones S0..S5</label>
+    <label class="tog"><input type="checkbox" id="t-cent"><span class="sw dot" style="background:#ffffff"></span>8 centros estrella</label>
+    <label class="tog"><input type="checkbox" id="t-edges"><span class="sw" style="background:var(--bulkE)"></span>240 aristas</label>
+    <label class="tog"><input type="checkbox" id="t-dual"><span class="sw" style="background:var(--dual)"></span>dual (144)</label>
+    <label class="tog"><input type="checkbox" id="t-anti"><span class="sw" style="background:var(--anti)"></span>inversion P</label>
+    <label class="tog"><input type="checkbox" id="t-circ"><span class="sw" style="background:var(--circ)"></span>circulacion</label>
+  </div>
+
+  <div class="section">Fundaciones (atlas v1.0)</div>
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="t-curv"><span class="sw" style="background:linear-gradient(90deg,#3d4ea6,#ff7a59)"></span>Forman-Ricci</label>
+    <label class="tog"><input type="checkbox" id="t-dorb"><span class="sw" style="background:linear-gradient(90deg,#6fdc8c,#c894ff)"></span>orbits duales (6)</label>
+  </div>
+
+  <div id="shell-legend" style="margin-top:6px;display:none">
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S0)"></span>S0:1</span>
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S1)"></span>S1:12 (VE)</span>
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S2)"></span>S2:6</span>
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S3)"></span>S3:24</span>
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S4)"></span>S4:12</span>
+    <span class="shell-leg"><span class="sw dot" style="background:var(--S5)"></span>S5:8</span>
+  </div>
+</div>
+
+<div id="facts" class="panel">
+  <h2>Verificacion estructural</h2>
+  <dl id="facts-list"></dl>
+</div>
+
+<div id="help" class="panel">arrastrar = rotar · rueda = zoom</div>
+
+<script>
+//=====================================================================
+//  GEOMETRY  (mirror of tetra64/geometry.mjs)
+//=====================================================================
+const EDGE = Math.SQRT2;
+const Eb = [[1,0,0],[0,1,0],[0,0,1]];
+const SIGNS=[]; for(const x of[-1,1])for(const y of[-1,1])for(const z of[-1,1])SIGNS.push([x,y,z]);
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const scl=(a,k)=>[a[0]*k,a[1]*k,a[2]*k];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const llen=a=>Math.hypot(a[0],a[1],a[2]);
+const dist2=(a,b)=>{const d=sub(a,b);return dot(d,d);};
+const cen=p=>scl(p.reduce(add,[0,0,0]),1/p.length);
+const det3=(a,b,c)=>a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]);
+const k6=p=>p.map(x=>(Object.is(x,-0)?0:x).toFixed(6)).join(",");
+
+function build(){
+  const stellaCenters=SIGNS.map(s=>[...s]);
+  const tetrahedra=[], octahedra=[];
+  stellaCenters.forEach((P,si)=>{
+    const ov=[]; for(const e of Eb){ov.push(add(P,e));ov.push(sub(P,e));}
+    octahedra.push({stella:si,vertices:ov});
+    SIGNS.forEach(s=>{
+      const apex=add(P,s);
+      const base=[add(P,scl(Eb[0],s[0])),add(P,scl(Eb[1],s[1])),add(P,scl(Eb[2],s[2]))];
+      const v=[apex,...base];
+      tetrahedra.push({id:tetrahedra.length,stella:si,sign:[...s],vertices:v,centroid:cen(v)});
+    });
+  });
+  const ve=[];
+  for(const a of[-1,1])for(const b of[-1,1]){ve.push([0,a,b]);ve.push([a,0,b]);ve.push([a,b,0]);}
+  const edges=[];
+  for(let i=0;i<ve.length;i++)for(let j=i+1;j<ve.length;j++)
+    if(Math.abs(dist2(ve[i],ve[j])-2)<1e-9)edges.push([i,j]);
+  const find=p=>ve.findIndex(v=>k6(v)===k6(p));
+  const triFaces=SIGNS.map(s=>[find([0,s[1],s[2]]),find([s[0],0,s[2]]),find([s[0],s[1],0])]);
+  const sqFaces=[];
+  for(let ax=0;ax<3;ax++)for(const sg of[-1,1]){
+    const idx=ve.map((v,i)=>[v,i]).filter(([v])=>v[ax]===sg).map(([,i])=>i);
+    const c=cen(idx.map(i=>ve[i])), ref=sub(ve[idx[0]],c), n=Eb[ax];
+    const ang=i=>{const w=sub(ve[i],c);return Math.atan2(dot(cross(ref,w),n),dot(ref,w));};
+    idx.sort((p,q)=>ang(p)-ang(q)); sqFaces.push(idx);
+  }
+  return {stellaCenters,tetrahedra,octahedra,ve:{vertices:ve,edges,triFaces,sqFaces}};
+}
+
+//=====================================================================
+//  STRUCTURAL ANALYSIS  (chirality, shells, edges, dual, antipodal)
+//=====================================================================
+function analyze(M){
+  for(const t of M.tetrahedra){
+    const v=t.vertices;
+    t.chir=Math.sign(det3(sub(v[1],v[0]),sub(v[2],v[0]),sub(v[3],v[0])));
+  }
+  const vmap=new Map();
+  for(const t of M.tetrahedra) for(const v of t.vertices){
+    const k=k6(v);
+    if(!vmap.has(k)) vmap.set(k,{id:vmap.size,pos:v,r2:dot(v,v)});
+  }
+  const verts=[...vmap.values()];
+  const shellGroups=new Map();
+  for(const v of verts){const k=v.r2.toFixed(6);if(!shellGroups.has(k))shellGroups.set(k,[]);shellGroups.get(k).push(v.id);}
+  const shells=[...shellGroups.entries()].map(([r2,ids])=>({r2:+r2,r:Math.sqrt(+r2),ids}))
+    .sort((a,b)=>a.r-b.r).map((s,i)=>({...s,name:"S"+i,idx:i}));
+  for(const s of shells) for(const id of s.ids) verts[id].shell=s.idx;
+  const eMap=new Map();
+  for(const t of M.tetrahedra) for(let i=0;i<4;i++) for(let j=i+1;j<4;j++){
+    const a=k6(t.vertices[i]),b=k6(t.vertices[j]);
+    const key=a<b?a+"|"+b:b+"|"+a;
+    if(!eMap.has(key)) eMap.set(key,{a:t.vertices[i],b:t.vertices[j],tetra:[]});
+    eMap.get(key).tetra.push(t.id);
+  }
+  const edges=[...eMap.values()];
+  const tEdgeKeys=M.tetrahedra.map(t=>{
+    const s=new Set();
+    for(let i=0;i<4;i++) for(let j=i+1;j<4;j++){
+      const a=k6(t.vertices[i]),b=k6(t.vertices[j]); s.add(a<b?a+"|"+b:b+"|"+a);
+    } return s;
+  });
+  const dualEdges=[];
+  for(let i=0;i<64;i++) for(let j=i+1;j<64;j++){
+    for(const e of tEdgeKeys[i]) if(tEdgeKeys[j].has(e)){dualEdges.push([i,j]);break;}
+  }
+  const antipodal=[];
+  for(const v of verts){
+    const o=vmap.get(k6(v.pos.map(x=>-x)));
+    if(o && o.id>v.id) antipodal.push([v.id,o.id]);
+  }
+  const chir={plus:0,minus:0}; for(const t of M.tetrahedra)(t.chir>0?chir.plus++:chir.minus++);
+  // ---- Forman-Ricci  F(e) = 4 - deg(u) - deg(v) ----
+  const degree=new Array(verts.length).fill(0);
+  for(const e of edges){const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; degree[a]++;degree[b]++;}
+  const formanPerEdge=edges.map(e=>{const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; return 4-degree[a]-degree[b];});
+  const formanVals=[...new Set(formanPerEdge)].sort((a,b)=>a-b);
+  const formanIdxOf=new Map(formanVals.map((v,i)=>[v,i]));
+  // ---- O_h orbits on dual edges ----
+  const perms=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  const psgn=p=>{let s=1;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)if(p[i]>p[j])s=-s;return s;};
+  const G=[]; for(const pi of perms) for(const sx of[-1,1]) for(const sy of[-1,1]) for(const sz of[-1,1]) G.push({pi,s:[sx,sy,sz]});
+  const applyOh=(g,v)=>[g.s[0]*v[g.pi[0]],g.s[1]*v[g.pi[1]],g.s[2]*v[g.pi[2]]];
+  const tkey=t=>t.vertices.map(k6).sort().join("/");
+  const tkeyToId=new Map(M.tetrahedra.map((t,i)=>[tkey(t),i]));
+  const dKey=(i,j)=>i<j?i+"|"+j:j+"|"+i;
+  const dKeyToIdx=new Map(dualEdges.map((p,idx)=>[dKey(p[0],p[1]),idx]));
+  const tImage=G.map(g=>M.tetrahedra.map(t=>tkeyToId.get(t.vertices.map(v=>applyOh(g,v)).map(k6).sort().join("/"))));
+  const visited=new Array(dualEdges.length).fill(false);
+  const dualOrbitOf=new Array(dualEdges.length).fill(-1);
+  const dualOrbitSizes=[];
+  for(let idx=0;idx<dualEdges.length;idx++){
+    if(visited[idx])continue;
+    const orbId=dualOrbitSizes.length; let sz=1;
+    visited[idx]=true; dualOrbitOf[idx]=orbId;
+    for(let gi=0;gi<G.length;gi++){
+      const[i,j]=dualEdges[idx];
+      const ii=tImage[gi][i],jj=tImage[gi][j];
+      const k=dKeyToIdx.get(dKey(ii,jj));
+      if(k!==undefined&&!visited[k]){visited[k]=true; dualOrbitOf[k]=orbId; sz++;}
+    }
+    dualOrbitSizes.push(sz);
+  }
+  // ---- closed walks tr(A^k) for k=1..6 (cheap; bigger k overflows readability) ----
+  function spectrumTrace(adj,n,kMax){
+    let Ak=adj.map(r=>r.slice()); const out=[trace(Ak)];
+    for(let k=2;k<=kMax;k++){Ak=matmul(Ak,adj,n); out.push(trace(Ak));} return out;
+  }
+  function matmul(A,B,n){const C=Array.from({length:n},()=>new Array(n).fill(0));
+    for(let i=0;i<n;i++)for(let k=0;k<n;k++){if(!A[i][k])continue;const aik=A[i][k];for(let j=0;j<n;j++)C[i][j]+=aik*B[k][j];} return C;}
+  function trace(M){let t=0;for(let i=0;i<M.length;i++)t+=M[i][i];return t;}
+  const V=verts.length, T=M.tetrahedra.length;
+  const Ap=Array.from({length:V},()=>new Array(V).fill(0));
+  for(const e of edges){const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; Ap[a][b]=1; Ap[b][a]=1;}
+  const Ad=Array.from({length:T},()=>new Array(T).fill(0));
+  for(const[i,j] of dualEdges){Ad[i][j]=1;Ad[j][i]=1;}
+  const walksPrimal=spectrumTrace(Ap,V,6), walksDual=spectrumTrace(Ad,T,6);
+  return {verts, shells, edges, dualEdges, antipodal, chir,
+          formanPerEdge, formanVals, formanIdxOf, degree,
+          dualOrbitOf, dualOrbitSizes, walksPrimal, walksDual};
+}
+
+const MODEL=build(), A=analyze(MODEL);
+
+//=====================================================================
+//  LIVE STRUCTURAL VERIFICATION (what was claimed -> what we computed)
+//=====================================================================
+const FACTS=[
+  ["arista","sqrt 2",true],
+  ["tetraedros",MODEL.tetrahedra.length+" / 64",MODEL.tetrahedra.length===64],
+  ["vertices unicos",A.verts.length+" / R63",A.verts.length===63],
+  ["quiralidad",A.chir.plus+"+ / "+A.chir.minus+"-",A.chir.plus===32&&A.chir.minus===32],
+  ["aristas",A.edges.length+" / R240",A.edges.length===240],
+  ["dual edges",A.dualEdges.length+" / R144",A.dualEdges.length===144],
+  ["dual cycles",(A.dualEdges.length-64+1)+" / R81",(A.dualEdges.length-64+1)===81],
+  ["cycle space dim",(A.edges.length-A.verts.length+1)+" / R178",(A.edges.length-A.verts.length+1)===178],
+  ["cascarones",A.shells.length+" / S0..S5",A.shells.length===6],
+  ["VE radio=arista","sqrt 2 = sqrt 2",true],
+  ["pares antipodales",A.antipodal.length+" + 1 (origen)",A.antipodal.length===31],
+  ["simetria","Oh, orden 48",true],
+];
+const FACTS_GROUPED=[
+  ["bulk",[
+    ["64 tetraedros",MODEL.tetrahedra.length===64?"PASS":"FAIL"],
+    ["63 vertices",A.verts.length===63?"PASS":"FAIL"],
+    ["240 aristas",A.edges.length===240?"PASS":"FAIL"],
+    ["32+ / 32-",A.chir.plus===32&&A.chir.minus===32?"PASS":"FAIL"],
+    ["6 cascarones (S0..S5)",A.shells.length===6?"PASS":"FAIL"],
+    ["12 vertices en VE",A.shells[1]&&A.shells[1].ids.length===12?"PASS":"FAIL"],
+    ["31 pares antipodales",A.antipodal.length===31?"PASS":"FAIL"],
+  ]],
+  ["dual graph (edge-sharing)",[
+    ["144 dual edges",A.dualEdges.length===144?"PASS":"FAIL"],
+    ["81 dual cycles",(A.dualEdges.length-64+1)===81?"PASS":"FAIL"],
+  ]],
+  ["1-skeleton homology",[
+    ["ker(d1^T) = 178",(A.edges.length-A.verts.length+1)===178?"PASS":"FAIL"],
+    ["= |E| - |V| + c","240 - 63 + 1"],
+  ]],
+  ["foundations (atlas v1.0)",[
+    ["256 triangles (tr(A^3)/6)",A.walksPrimal[2]/6===256?"PASS":"FAIL"],
+    ["tr(A^2) primal = 2|E|",A.walksPrimal[1]===2*A.edges.length?"PASS":"FAIL"],
+    ["dual bipartite (odd tr(A^k)=0)",[1,3,5].every(k=>A.walksDual[k-1]===0)?"PASS":"FAIL"],
+    ["+/- bipartition dual",(()=>{let pp=0,mm=0;for(const[i,j]of A.dualEdges){const ci=MODEL.tetrahedra[i].chir,cj=MODEL.tetrahedra[j].chir;if(ci>0&&cj>0)pp++;else if(ci<0&&cj<0)mm++;}return pp===0&&mm===0;})()?"PASS":"FAIL"],
+    ["F-Ricci values","6 distintos: "+A.formanVals.join(", ")],
+    ["O_h orbits duales","6: "+A.dualOrbitSizes.join(", ")],
+  ]],
+];
+
+const factsEl=document.getElementById("facts-list");
+function renderFacts(){
+  let html="";
+  for(const [group,rows] of FACTS_GROUPED){
+    html+=`<div class="group"><div class="group-title">${group}</div>`;
+    for(const [k,v] of rows){
+      const cls=v==="PASS"?"ok":(v==="FAIL"?"bad":"");
+      const text=(v==="PASS"||v==="FAIL")?k:`${k} = ${v}`;
+      html+=`<div style="display:flex;justify-content:space-between"><span style="color:var(--mut)">${text}</span><span class="${cls}"></span></div>`;
+    }
+    html+=`</div>`;
+  }
+  // shells block
+  html+=`<div class="group"><div class="group-title">cascarones radiales</div>`;
+  for(const s of A.shells){
+    html+=`<div style="display:flex;justify-content:space-between"><span style="color:var(--mut)"><span class="sw dot" style="background:var(--S${s.idx});margin-right:5px;vertical-align:middle"></span>${s.name}  r=${s.r.toFixed(3)}</span><span>${s.ids.length}</span></div>`;
+  }
+  html+=`</div>`;
+  factsEl.innerHTML=html;
+}
+renderFacts();
+
+//=====================================================================
+//  RENDERER  (painter's-algorithm software 3D, ~no deps)
+//=====================================================================
+const cv=document.getElementById("stage"), ctx=cv.getContext("2d");
+let W,H,DPR;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  cv.style.width=W+"px";cv.style.height=H+"px";
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);}
+addEventListener("resize",resize);
+
+let yaw=0.6, pitch=-0.5, zoom=1, spin=true, t0=performance.now();
+const LIGHT=(()=>{const l=[0.35,0.55,0.9],m=llen(l);return scl(l,1/m);})();
+
+function rot(p){
+  const cy=Math.cos(yaw),sy=Math.sin(yaw),cx=Math.cos(pitch),sx=Math.sin(pitch);
+  let x=p[0]*cy+p[2]*sy, z=-p[0]*sy+p[2]*cy, y=p[1];
+  return [x, y*cx-z*sx, y*sx+z*cx];
+}
+function project(p){
+  const r=rot(p), f=7, persp=f/(f-r[2]);
+  const s=Math.min(W,H)*0.13*zoom*persp;
+  return {x:W/2+r[0]*s, y:H/2-r[1]*s, z:r[2]};
+}
+function shadeRGB(rgb,verts3,alpha,emis=0.34){
+  const n=cross(sub(verts3[1],verts3[0]),sub(verts3[2],verts3[0])), m=llen(n)||1;
+  const lit=Math.abs(dot([n[0]/m,n[1]/m,n[2]/m],LIGHT));
+  const k=emis+(1-emis)*lit;
+  return `rgba(${Math.round(rgb[0]*k)},${Math.round(rgb[1]*k)},${Math.round(rgb[2]*k)},${alpha})`;
+}
+const COL={
+  tet:[122,162,255], nuc:[245,196,81], oct:[176,124,255], rad:[79,208,224],
+  chirP:[255,140,90], chirM:[94,192,255],
+  bulkE:[63,71,90], dual:[111,220,140], anti:[255,111,181], circ:[200,148,255],
+  shell:[[255,255,255],[245,196,81],[79,208,224],[255,122,217],[123,224,148],[255,174,90]],
+};
+
+const TET_FACES=[[0,1,2],[0,1,3],[0,2,3],[1,2,3]];
+const OCT_EDGES=[[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,4],[4,3],[3,5],[5,2]];
+
+function frame(){
+  if(spin){yaw+=0.0045;}
+  ctx.clearRect(0,0,W,H);
+  const items=[];
+  const show={
+    tet:t_tet.checked, nuc:t_nuc.checked, rad:t_rad.checked, oct:t_oct.checked,
+    solid:t_solid.checked,
+    chir:t_chir.checked, shell:t_shell.checked, cent:t_cent.checked,
+    edges:t_edges.checked, dual:t_dual.checked, anti:t_anti.checked, circ:t_circ.checked,
+    curv:t_curv.checked, dorb:t_dorb.checked,
+  };
+  document.getElementById("shell-legend").style.display = show.shell ? "block" : "none";
+
+  // ---- 240 bulk edges (drawn first, faint, optionally coloured by Forman-Ricci) ----
+  // F-Ricci palette across the 6 distinct values  (cold = more negative, warm = less negative)
+  const F_PAL = ["#3d4ea6","#4a87c8","#46c6c6","#8fd07e","#f0b450","#ff7a59"];
+  if(show.edges || show.curv){
+    for(let ei=0; ei<A.edges.length; ei++){
+      const e=A.edges[ei];
+      const pa=project(e.a), pb=project(e.b), z=(pa.z+pb.z)/2 - 0.01;
+      const col = show.curv ? F_PAL[A.formanIdxOf.get(A.formanPerEdge[ei])] : "rgba(63,71,90,0.55)";
+      const lw  = show.curv ? 1.0 : 0.5;
+      items.push({z,draw(){
+        ctx.strokeStyle=col;ctx.lineWidth=lw;
+        ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+      }});
+    }
+  }
+
+  // ---- 64 tetrahedra ----
+  if(show.tet){
+    for(const t of MODEL.tetrahedra){
+      const P=t.vertices.map(project), R3=t.vertices.map(rot);
+      const tCol = show.chir ? (t.chir>0?COL.chirP:COL.chirM) : COL.tet;
+      const strokeRGB = `rgba(${tCol[0]},${tCol[1]},${tCol[2]},0.55)`;
+      if(show.solid){
+        for(const f of TET_FACES){
+          const v3=[R3[f[0]],R3[f[1]],R3[f[2]]];
+          const z=(v3[0][2]+v3[1][2]+v3[2][2])/3;
+          const p2=[P[f[0]],P[f[1]],P[f[2]]];
+          items.push({z,draw(){
+            ctx.beginPath();ctx.moveTo(p2[0].x,p2[0].y);ctx.lineTo(p2[1].x,p2[1].y);ctx.lineTo(p2[2].x,p2[2].y);ctx.closePath();
+            ctx.fillStyle=shadeRGB(tCol,v3,show.chir?0.22:0.16);ctx.fill();
+            ctx.strokeStyle=strokeRGB;ctx.lineWidth=0.6;ctx.stroke();
+          }});
+        }
+      }else{
+        const z=(R3[0][2]+R3[1][2]+R3[2][2]+R3[3][2])/4;
+        items.push({z,draw(){
+          ctx.strokeStyle=strokeRGB;ctx.lineWidth=0.7;ctx.beginPath();
+          const ES=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
+          for(const[a,b]of ES){ctx.moveTo(P[a].x,P[a].y);ctx.lineTo(P[b].x,P[b].y);}
+          ctx.stroke();
+        }});
+      }
+    }
+  }
+
+  // ---- 8 octahedra (wire) ----
+  if(show.oct){
+    for(const o of MODEL.octahedra){
+      const P=o.vertices.map(project), R3=o.vertices.map(rot), z=cen(R3)[2];
+      items.push({z,draw(){
+        ctx.strokeStyle="rgba(176,124,255,0.5)";ctx.lineWidth=0.7;ctx.beginPath();
+        for(const[a,b]of OCT_EDGES){ctx.moveTo(P[a].x,P[a].y);ctx.lineTo(P[b].x,P[b].y);}
+        ctx.stroke();
+      }});
+    }
+  }
+
+  // ---- dual graph (edge-sharing, 144 lines between tetra centroids; optionally coloured by O_h orbit) ----
+  const O_PAL = ["#6fdc8c","#c894ff","#ff7a59","#ffd86b","#5ec0ff","#ff6fb5"];
+  if(show.dual){
+    for(let ei=0; ei<A.dualEdges.length; ei++){
+      const [i,j]=A.dualEdges[ei];
+      const ca=MODEL.tetrahedra[i].centroid, cb=MODEL.tetrahedra[j].centroid;
+      const pa=project(ca), pb=project(cb), z=(pa.z+pb.z)/2;
+      const col = show.dorb ? O_PAL[A.dualOrbitOf[ei] % O_PAL.length] : "rgba(111,220,140,0.55)";
+      const lw  = show.dorb ? 1.1 : 0.7;
+      items.push({z,draw(){
+        ctx.strokeStyle=col;ctx.lineWidth=lw;
+        ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+      }});
+    }
+  }
+
+  // ---- antipodal pairs (inversion P) ----
+  if(show.anti){
+    for(const [i,j] of A.antipodal){
+      const pa=project(A.verts[i].pos), pb=project(A.verts[j].pos);
+      const z=(pa.z+pb.z)/2 - 0.005;
+      items.push({z,draw(){
+        ctx.setLineDash([4,3]);
+        ctx.strokeStyle="rgba(255,111,181,0.55)";ctx.lineWidth=0.6;
+        ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+        ctx.setLineDash([]);
+      }});
+    }
+  }
+
+  // ---- counter-rotating circulation (chirality flow visualisation) ----
+  if(show.circ){
+    const tt=(performance.now()-t0)*0.001;
+    // two circles in opposite directions, around the +y and -y axes, in the equatorial plane
+    for(const sgn of [+1,-1]){
+      const R=1.6, segs=48, pts=[];
+      for(let k=0;k<=segs;k++){
+        const ang=2*Math.PI*k/segs + sgn*tt*0.7;
+        pts.push([R*Math.cos(ang), 0, R*Math.sin(ang)]);
+      }
+      const Pj=pts.map(project), Rj=pts.map(rot);
+      // sample point depths
+      for(let k=0;k<segs;k++){
+        const a=Pj[k], b=Pj[k+1], z=(Rj[k][2]+Rj[k+1][2])/2;
+        items.push({z,draw(){
+          ctx.strokeStyle=sgn>0?"rgba(255,140,90,0.85)":"rgba(94,192,255,0.85)";
+          ctx.lineWidth=1.6;
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+        }});
+      }
+      // arrowhead
+      const head=Pj[Math.floor(segs*0.25)], next=Pj[Math.floor(segs*0.25)+1];
+      const z=Rj[Math.floor(segs*0.25)][2]+0.001;
+      items.push({z,draw(){
+        ctx.fillStyle=sgn>0?"rgba(255,140,90,0.95)":"rgba(94,192,255,0.95)";
+        const dx=next.x-head.x, dy=next.y-head.y, m=Math.hypot(dx,dy)||1;
+        const ux=dx/m, uy=dy/m, vx=-uy, vy=ux, L=10, B=5;
+        ctx.beginPath();
+        ctx.moveTo(head.x+ux*L, head.y+uy*L);
+        ctx.lineTo(head.x-vx*B, head.y-vy*B);
+        ctx.lineTo(head.x+vx*B, head.y+vy*B);
+        ctx.closePath();ctx.fill();
+      }});
+    }
+  }
+
+  // ---- nucleus cuboctahedron (filled, bright) ----
+  if(show.nuc){
+    const V=MODEL.ve.vertices, P=V.map(project), R3=V.map(rot);
+    const faces=[...MODEL.ve.triFaces.map(f=>({f,sq:false})),...MODEL.ve.sqFaces.map(f=>({f,sq:true}))];
+    for(const{f,sq}of faces){
+      const v3=f.map(i=>R3[i]); const z=cen(v3)[2]+0.001;
+      const p2=f.map(i=>P[i]);
+      items.push({z,draw(){
+        ctx.beginPath();ctx.moveTo(p2[0].x,p2[0].y);for(let i=1;i<p2.length;i++)ctx.lineTo(p2[i].x,p2[i].y);ctx.closePath();
+        ctx.fillStyle=shadeRGB(COL.nuc,v3,sq?0.30:0.42,0.4);ctx.fill();
+        ctx.strokeStyle="rgba(245,196,81,0.95)";ctx.lineWidth=1.4;ctx.stroke();
+      }});
+    }
+    for(let i=0;i<V.length;i++){const z=R3[i][2];const p=P[i];
+      items.push({z:z+0.002,draw(){ctx.fillStyle="#ffe49a";ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fill();}});}
+  }
+
+  // ---- 12 radial equilibrium vectors ----
+  if(show.rad){
+    const o=project([0,0,0]);
+    for(const v of MODEL.ve.vertices){
+      const p=project(v), z=(rot(v)[2])/2;
+      items.push({z,draw(){
+        ctx.strokeStyle="rgba(79,208,224,0.85)";ctx.lineWidth=1.1;
+        ctx.beginPath();ctx.moveTo(o.x,o.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+      }});
+    }
+    items.push({z:99,draw(){ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(o.x,o.y,3.4,0,7);ctx.fill();}});
+  }
+
+  // ---- shells: dots at all 63 vertices, coloured by shell ----
+  if(show.shell){
+    for(const v of A.verts){
+      const p=project(v.pos), z=rot(v.pos)[2]+0.003;
+      const rgb=COL.shell[v.shell];
+      const r= v.shell===0?5: (v.shell===1?3.2:2.6);
+      items.push({z,draw(){
+        ctx.fillStyle=`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+        ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.fill();
+      }});
+    }
+  }
+
+  // ---- 8 stella centres (cube of edge 2, also a star tetrahedron in S2) ----
+  if(show.cent){
+    const C=MODEL.stellaCenters, P=C.map(project), R3=C.map(rot);
+    // dashed cube edges between centres at distance 2 along an axis
+    for(let i=0;i<8;i++) for(let j=i+1;j<8;j++){
+      const d=sub(C[i],C[j]); if(Math.abs(dot(d,d)-4)<1e-9){
+        const z=(R3[i][2]+R3[j][2])/2;
+        items.push({z,draw(){
+          ctx.setLineDash([3,3]);ctx.strokeStyle="rgba(255,255,255,0.4)";ctx.lineWidth=0.6;
+          ctx.beginPath();ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke();
+          ctx.setLineDash([]);
+        }});
+      }
+    }
+    for(let i=0;i<8;i++){const z=R3[i][2]+0.004;
+      items.push({z,draw(){
+        ctx.fillStyle="#ffffff";ctx.beginPath();ctx.arc(P[i].x,P[i].y,3.4,0,7);ctx.fill();
+      }});}
+  }
+
+  items.sort((a,b)=>a.z-b.z);
+  for(const it of items)it.draw();
+  requestAnimationFrame(frame);
+}
+
+//------- interaction -------
+let drag=false,lx=0,ly=0;
+cv.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;ly=e.clientY;cv.setPointerCapture(e.pointerId);});
+cv.addEventListener("pointerup",()=>drag=false);
+cv.addEventListener("pointermove",e=>{if(!drag)return;
+  yaw+=(e.clientX-lx)*0.008;pitch+=(e.clientY-ly)*0.008;
+  pitch=Math.max(-1.5,Math.min(1.5,pitch));lx=e.clientX;ly=e.clientY;});
+cv.addEventListener("wheel",e=>{e.preventDefault();zoom*=Math.exp(-e.deltaY*0.0012);
+  zoom=Math.max(0.4,Math.min(4,zoom));},{passive:false});
+
+const t_tet=document.getElementById("t-tet"), t_nuc=document.getElementById("t-nuc"),
+      t_rad=document.getElementById("t-rad"), t_oct=document.getElementById("t-oct"),
+      t_solid=document.getElementById("t-solid"), t_spin=document.getElementById("t-spin"),
+      t_chir=document.getElementById("t-chir"), t_shell=document.getElementById("t-shell"),
+      t_cent=document.getElementById("t-cent"), t_edges=document.getElementById("t-edges"),
+      t_dual=document.getElementById("t-dual"), t_anti=document.getElementById("t-anti"),
+      t_circ=document.getElementById("t-circ"),
+      t_curv=document.getElementById("t-curv"), t_dorb=document.getElementById("t-dorb");
+t_spin.addEventListener("change",()=>spin=t_spin.checked);
+
+resize();frame();
+</script>
+</body>
+</html>

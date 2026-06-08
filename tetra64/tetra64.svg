@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="680" viewBox="0 0 960 680" font-family="ui-monospace,monospace">
+<rect width="960" height="680" fill="#0a0c12"/>
+<text x="24" y="40" fill="#e8ecf4" font-size="20">64-Tetrahedron Grid</text>
+<text x="24" y="62" fill="#8b93a7" font-size="13">8 star tetrahedra (8x8) around a cuboctahedral vector-equilibrium nucleus  ·  radius = edge = sqrt2</text>
+<text x="24" y="656" fill="#8b93a7" font-size="12">Sigma(vertices)=0  ·  64 regular tetrahedra  ·  nucleus: 12 vertices, 24 edges, 8 tri + 6 squares  ·  symmetry Oh (48)</text>
+<path d="M502.2 331.7L536.1 357.0M502.2 331.7L492.6 294.6M502.2 331.7L461.7 362.4M536.1 357.0L492.6 294.6M536.1 357.0L461.7 362.4M492.6 294.6L461.7 362.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M504.2 422.4L536.1 357.0M504.2 422.4L493.9 395.1M504.2 422.4L461.7 362.4M536.1 357.0L493.9 395.1M536.1 357.0L461.7 362.4M493.9 395.1L461.7 362.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M418.5 301.4L444.9 325.7M418.5 301.4L492.6 294.6M418.5 301.4L461.7 362.4M444.9 325.7L492.6 294.6M444.9 325.7L461.7 362.4M492.6 294.6L461.7 362.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M570.1 287.4L536.1 357.0M570.1 287.4L492.6 294.6M570.1 287.4L530.5 318.4M536.1 357.0L492.6 294.6M536.1 357.0L530.5 318.4M492.6 294.6L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M504.2 422.4L542.1 463.3M504.2 422.4L493.9 395.1M504.2 422.4L459.8 466.7M542.1 463.3L493.9 395.1M542.1 463.3L459.8 466.7M493.9 395.1L459.8 466.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M412.1 400.2L444.9 325.7M412.1 400.2L493.9 395.1M412.1 400.2L461.7 362.4M444.9 325.7L493.9 395.1M444.9 325.7L461.7 362.4M493.9 395.1L461.7 362.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M418.5 301.4L444.9 325.7M418.5 301.4L394.8 254.9M418.5 301.4L363.5 332.6M444.9 325.7L394.8 254.9M444.9 325.7L363.5 332.6M394.8 254.9L363.5 332.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M580.0 389.7L536.1 357.0M580.0 389.7L493.9 395.1M580.0 389.7L530.5 318.4M536.1 357.0L493.9 395.1M536.1 357.0L530.5 318.4M493.9 395.1L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 245.7L444.9 325.7M480.0 245.7L492.6 294.6M480.0 245.7L530.5 318.4M444.9 325.7L492.6 294.6M444.9 325.7L530.5 318.4M492.6 294.6L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="493.9" cy="395.1" r="3.2" fill="#ffe49a"/>
+<path d="M506.7 531.9L542.1 463.3M506.7 531.9L495.6 519.9M506.7 531.9L459.8 466.7M542.1 463.3L495.6 519.9M542.1 463.3L459.8 466.7M495.6 519.9L459.8 466.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="444.9" cy="325.7" r="3.2" fill="#ffe49a"/>
+<path d="M412.1 400.2L440.6 443.3M412.1 400.2L493.9 395.1M412.1 400.2L459.8 466.7M440.6 443.3L493.9 395.1M440.6 443.3L459.8 466.7M493.9 395.1L459.8 466.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="444.9,325.7 493.9,395.1 530.5,318.4" fill="rgb(198,159,66)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M570.1 287.4L620.8 310.7M570.1 287.4L569.8 236.0M570.1 287.4L530.5 318.4M620.8 310.7L569.8 236.0M620.8 310.7L530.5 318.4M569.8 236.0L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M412.1 400.2L444.9 325.7M412.1 400.2L384.4 365.1M412.1 400.2L363.5 332.6M444.9 325.7L384.4 365.1M444.9 325.7L363.5 332.6M384.4 365.1L363.5 332.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M314.0 263.7L326.9 285.2M314.0 263.7L394.8 254.9M314.0 263.7L363.5 332.6M326.9 285.2L394.8 254.9M326.9 285.2L363.5 332.6M394.8 254.9L363.5 332.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="530.5" cy="318.4" r="3.2" fill="#ffe49a"/>
+<path d="M580.0 389.7L542.1 463.3M580.0 389.7L493.9 395.1M580.0 389.7L536.8 438.6M542.1 463.3L493.9 395.1M542.1 463.3L536.8 438.6M493.9 395.1L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 358.0L444.9 325.7M480.0 358.0L493.9 395.1M480.0 358.0L530.5 318.4M444.9 325.7L493.9 395.1M444.9 325.7L530.5 318.4M493.9 395.1L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 245.7L444.9 325.7M480.0 245.7L394.8 254.9M480.0 245.7L421.9 275.6M444.9 325.7L394.8 254.9M444.9 325.7L421.9 275.6M394.8 254.9L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="384.4,365.1 440.6,443.3 493.9,395.1 444.9,325.7" fill="rgb(238,191,79)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M404.1 522.2L440.6 443.3M404.1 522.2L495.6 519.9M404.1 522.2L459.8 466.7M440.6 443.3L495.6 519.9M440.6 443.3L459.8 466.7M495.6 519.9L459.8 466.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M580.0 389.7L620.8 310.7M580.0 389.7L581.5 350.5M580.0 389.7L530.5 318.4M620.8 310.7L581.5 350.5M620.8 310.7L530.5 318.4M581.5 350.5L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="493.9" y2="395.1" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M412.1 400.2L440.6 443.3M412.1 400.2L384.4 365.1M412.1 400.2L349.7 447.7M440.6 443.3L384.4 365.1M440.6 443.3L349.7 447.7M384.4 365.1L349.7 447.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="444.9" y2="325.7" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M480.0 245.7L522.8 265.4M480.0 245.7L569.8 236.0M480.0 245.7L530.5 318.4M522.8 265.4L569.8 236.0M522.8 265.4L530.5 318.4M569.8 236.0L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="440.6,443.3 493.9,395.1 536.8,438.6" fill="rgb(212,170,70)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M294.1 371.8L326.9 285.2M294.1 371.8L384.4 365.1M294.1 371.8L363.5 332.6M326.9 285.2L384.4 365.1M326.9 285.2L363.5 332.6M384.4 365.1L363.5 332.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="536.8,438.6 493.9,395.1 530.5,318.4 581.5,350.5" fill="rgb(145,116,48)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<line x1="480.0" y1="358.0" x2="530.5" y2="318.4" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M592.5 517.5L542.1 463.3M592.5 517.5L495.6 519.9M592.5 517.5L536.8 438.6M542.1 463.3L495.6 519.9M542.1 463.3L536.8 438.6M495.6 519.9L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="444.9,325.7 421.9,275.6 522.8,265.4 530.5,318.4" fill="rgb(115,92,38)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<polygon points="444.9,325.7 384.4,365.1 421.9,275.6" fill="rgb(150,120,50)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M480.0 358.0L440.6 443.3M480.0 358.0L493.9 395.1M480.0 358.0L536.8 438.6M440.6 443.3L493.9 395.1M440.6 443.3L536.8 438.6M493.9 395.1L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M664.6 225.8L620.8 310.7M664.6 225.8L569.8 236.0M664.6 225.8L630.1 254.6M620.8 310.7L569.8 236.0M620.8 310.7L630.1 254.6M569.8 236.0L630.1 254.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 358.0L444.9 325.7M480.0 358.0L384.4 365.1M480.0 358.0L421.9 275.6M444.9 325.7L384.4 365.1M444.9 325.7L421.9 275.6M384.4 365.1L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="440.6" cy="443.3" r="3.2" fill="#ffe49a"/>
+<path d="M362.5 191.4L326.9 285.2M362.5 191.4L394.8 254.9M362.5 191.4L421.9 275.6M326.9 285.2L394.8 254.9M326.9 285.2L421.9 275.6M394.8 254.9L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="384.4" cy="365.1" r="3.2" fill="#ffe49a"/>
+<path d="M580.0 389.7L639.0 433.6M580.0 389.7L581.5 350.5M580.0 389.7L536.8 438.6M639.0 433.6L581.5 350.5M639.0 433.6L536.8 438.6M581.5 350.5L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M404.1 522.2L440.6 443.3M404.1 522.2L370.9 506.2M404.1 522.2L349.7 447.7M440.6 443.3L370.9 506.2M440.6 443.3L349.7 447.7M370.9 506.2L349.7 447.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="522.8,265.4 581.5,350.5 530.5,318.4" fill="rgb(164,131,54)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<line x1="480.0" y1="358.0" x2="440.6" y2="443.3" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M480.0 358.0L522.8 265.4M480.0 358.0L581.5 350.5M480.0 358.0L530.5 318.4M522.8 265.4L581.5 350.5M522.8 265.4L530.5 318.4M581.5 350.5L530.5 318.4" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="384.4" y2="365.1" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M294.1 371.8L305.2 416.7M294.1 371.8L384.4 365.1M294.1 371.8L349.7 447.7M305.2 416.7L384.4 365.1M305.2 416.7L349.7 447.7M384.4 365.1L349.7 447.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="536.8" cy="438.6" r="3.2" fill="#ffe49a"/>
+<path d="M480.0 245.7L522.8 265.4M480.0 245.7L462.7 178.5M480.0 245.7L421.9 275.6M522.8 265.4L462.7 178.5M522.8 265.4L421.9 275.6M462.7 178.5L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="536.8" y2="438.6" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<line x1="480.0" y1="358.0" x2="421.9" y2="275.6" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M480.0 502.9L440.6 443.3M480.0 502.9L495.6 519.9M480.0 502.9L536.8 438.6M440.6 443.3L495.6 519.9M440.6 443.3L536.8 438.6M495.6 519.9L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="421.9" cy="275.6" r="3.2" fill="#ffe49a"/>
+<path d="M689.5 342.5L620.8 310.7M689.5 342.5L581.5 350.5M689.5 342.5L630.1 254.6M620.8 310.7L581.5 350.5M620.8 310.7L630.1 254.6M581.5 350.5L630.1 254.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="581.5" y2="350.5" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M480.0 358.0L440.6 443.3M480.0 358.0L384.4 365.1M480.0 358.0L413.4 410.3M440.6 443.3L384.4 365.1M440.6 443.3L413.4 410.3M384.4 365.1L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="522.8" y2="265.4" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<polygon points="440.6,443.3 384.4,365.1 413.4,410.3" fill="rgb(164,131,54)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M569.3 164.7L522.8 265.4M569.3 164.7L569.8 236.0M569.3 164.7L630.1 254.6M522.8 265.4L569.8 236.0M522.8 265.4L630.1 254.6M569.8 236.0L630.1 254.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M345.0 315.2L326.9 285.2M345.0 315.2L384.4 365.1M345.0 315.2L421.9 275.6M326.9 285.2L384.4 365.1M326.9 285.2L421.9 275.6M384.4 365.1L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="581.5" cy="350.5" r="3.2" fill="#ffe49a"/>
+<path d="M592.5 517.5L639.0 433.6M592.5 517.5L596.8 499.4M592.5 517.5L536.8 438.6M639.0 433.6L596.8 499.4M639.0 433.6L536.8 438.6M596.8 499.4L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="522.8" cy="265.4" r="3.2" fill="#ffe49a"/>
+<path d="M480.0 358.0L529.3 403.4M480.0 358.0L581.5 350.5M480.0 358.0L536.8 438.6M529.3 403.4L581.5 350.5M529.3 403.4L536.8 438.6M581.5 350.5L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M268.8 509.3L305.2 416.7M268.8 509.3L370.9 506.2M268.8 509.3L349.7 447.7M305.2 416.7L370.9 506.2M305.2 416.7L349.7 447.7M370.9 506.2L349.7 447.7" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 358.0L522.8 265.4M480.0 358.0L460.0 304.8M480.0 358.0L421.9 275.6M522.8 265.4L460.0 304.8M522.8 265.4L421.9 275.6M460.0 304.8L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="529.3,403.4 581.5,350.5 536.8,438.6" fill="rgb(150,120,50)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<polygon points="536.8,438.6 440.6,443.3 413.4,410.3 529.3,403.4" fill="rgb(115,92,38)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M362.5 191.4L388.8 203.5M362.5 191.4L462.7 178.5M362.5 191.4L421.9 275.6M388.8 203.5L462.7 178.5M388.8 203.5L421.9 275.6M462.7 178.5L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="413.4" y2="410.3" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<polygon points="413.4,410.3 384.4,365.1 421.9,275.6 460.0,304.8" fill="rgb(145,116,48)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M689.5 342.5L639.0 433.6M689.5 342.5L581.5 350.5M689.5 342.5L653.8 395.9M639.0 433.6L581.5 350.5M639.0 433.6L653.8 395.9M581.5 350.5L653.8 395.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="522.8,265.4 460.0,304.8 421.9,275.6" fill="rgb(212,170,70)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M480.0 502.9L440.6 443.3M480.0 502.9L370.9 506.2M480.0 502.9L413.4 410.3M440.6 443.3L370.9 506.2M440.6 443.3L413.4 410.3M370.9 506.2L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="529.3" y2="403.4" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M583.6 293.5L522.8 265.4M583.6 293.5L581.5 350.5M583.6 293.5L630.1 254.6M522.8 265.4L581.5 350.5M522.8 265.4L630.1 254.6M581.5 350.5L630.1 254.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<line x1="480.0" y1="358.0" x2="460.0" y2="304.8" stroke="#4fd0e0" stroke-opacity="0.85" stroke-width="1.1"/>
+<path d="M345.0 315.2L305.2 416.7M345.0 315.2L384.4 365.1M345.0 315.2L413.4 410.3M305.2 416.7L384.4 365.1M305.2 416.7L413.4 410.3M384.4 365.1L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M569.3 164.7L522.8 265.4M569.3 164.7L462.7 178.5M569.3 164.7L511.5 188.3M522.8 265.4L462.7 178.5M522.8 265.4L511.5 188.3M462.7 178.5L511.5 188.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="460.0,304.8 529.3,403.4 581.5,350.5 522.8,265.4" fill="rgb(238,191,79)" fill-opacity="0.55" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M480.0 502.9L529.3 403.4M480.0 502.9L596.8 499.4M480.0 502.9L536.8 438.6M529.3 403.4L596.8 499.4M529.3 403.4L536.8 438.6M596.8 499.4L536.8 438.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M480.0 358.0L529.3 403.4M480.0 358.0L460.0 304.8M480.0 358.0L413.4 410.3M529.3 403.4L460.0 304.8M529.3 403.4L413.4 410.3M460.0 304.8L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M345.0 315.2L388.8 203.5M345.0 315.2L460.0 304.8M345.0 315.2L421.9 275.6M388.8 203.5L460.0 304.8M388.8 203.5L421.9 275.6M460.0 304.8L421.9 275.6" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="413.4" cy="410.3" r="3.2" fill="#ffe49a"/>
+<path d="M722.1 495.6L639.0 433.6M722.1 495.6L596.8 499.4M722.1 495.6L653.8 395.9M639.0 433.6L596.8 499.4M639.0 433.6L653.8 395.9M596.8 499.4L653.8 395.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M583.6 293.5L529.3 403.4M583.6 293.5L581.5 350.5M583.6 293.5L653.8 395.9M529.3 403.4L581.5 350.5M529.3 403.4L653.8 395.9M581.5 350.5L653.8 395.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M321.3 482.4L305.2 416.7M321.3 482.4L370.9 506.2M321.3 482.4L413.4 410.3M305.2 416.7L370.9 506.2M305.2 416.7L413.4 410.3M370.9 506.2L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<polygon points="529.3,403.4 460.0,304.8 413.4,410.3" fill="rgb(198,159,66)" fill-opacity="0.7" stroke="#f5c451" stroke-width="1.6"/>
+<path d="M583.6 293.5L522.8 265.4M583.6 293.5L460.0 304.8M583.6 293.5L511.5 188.3M522.8 265.4L460.0 304.8M522.8 265.4L511.5 188.3M460.0 304.8L511.5 188.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="529.3" cy="403.4" r="3.2" fill="#ffe49a"/>
+<path d="M437.3 80.0L388.8 203.5M437.3 80.0L462.7 178.5M437.3 80.0L511.5 188.3M388.8 203.5L462.7 178.5M388.8 203.5L511.5 188.3M462.7 178.5L511.5 188.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="460.0" cy="304.8" r="3.2" fill="#ffe49a"/>
+<path d="M480.0 502.9L529.3 403.4M480.0 502.9L456.3 477.2M480.0 502.9L413.4 410.3M529.3 403.4L456.3 477.2M529.3 403.4L413.4 410.3M456.3 477.2L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M345.0 315.2L371.9 359.9M345.0 315.2L460.0 304.8M345.0 315.2L413.4 410.3M371.9 359.9L460.0 304.8M371.9 359.9L413.4 410.3M460.0 304.8L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M603.4 471.6L529.3 403.4M603.4 471.6L596.8 499.4M603.4 471.6L653.8 395.9M529.3 403.4L596.8 499.4M529.3 403.4L653.8 395.9M596.8 499.4L653.8 395.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M583.6 293.5L529.3 403.4M583.6 293.5L460.0 304.8M583.6 293.5L517.6 348.9M529.3 403.4L460.0 304.8M529.3 403.4L517.6 348.9M460.0 304.8L517.6 348.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M428.9 222.0L388.8 203.5M428.9 222.0L460.0 304.8M428.9 222.0L511.5 188.3M388.8 203.5L460.0 304.8M388.8 203.5L511.5 188.3M460.0 304.8L511.5 188.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M321.3 482.4L371.9 359.9M321.3 482.4L456.3 477.2M321.3 482.4L413.4 410.3M371.9 359.9L456.3 477.2M371.9 359.9L413.4 410.3M456.3 477.2L413.4 410.3" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M603.4 471.6L529.3 403.4M603.4 471.6L456.3 477.2M603.4 471.6L517.6 348.9M529.3 403.4L456.3 477.2M529.3 403.4L517.6 348.9M456.3 477.2L517.6 348.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M428.9 222.0L371.9 359.9M428.9 222.0L460.0 304.8M428.9 222.0L517.6 348.9M371.9 359.9L460.0 304.8M371.9 359.9L517.6 348.9M460.0 304.8L517.6 348.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<path d="M416.3 433.7L371.9 359.9M416.3 433.7L456.3 477.2M416.3 433.7L517.6 348.9M371.9 359.9L456.3 477.2M371.9 359.9L517.6 348.9M456.3 477.2L517.6 348.9" stroke="#7aa2ff" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+<circle cx="480.0" cy="358.0" r="3.6" fill="#ffffff"/>
+</svg>
