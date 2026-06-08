@@ -9,7 +9,8 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { build } from "./geometry.mjs";
 import { analyze } from "./analysis.mjs";
-import { trianglesAndBetti, bopRank, homGdim, dualCycleSpaceIrreps, shellRatiosPhi } from "./analysis-phase2.mjs";
+import { trianglesAndBetti, bopRank, homGdim, dualCycleSpaceIrreps, shellRatiosPhi,
+         formanRicci, closedWalks, dualEdgeOrbits } from "./analysis-phase2.mjs";
 import { OH_IRREP_NAMES, OH_IRREP_DIMS } from "./oh-character-table.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -101,6 +102,43 @@ const bipartiteOk = edgesPP === 0 && edgesMM === 0;
 console.log(`  +/+ dual edges: ${edgesPP}    -/- : ${edgesMM}    +/- : ${edgesPM}`);
 console.log(`  bipartite (every dual edge crosses chirality)?  ${okIcon(bipartiteOk)}    atlas [OBS-BIPARTITE-STRUCTURE]`);
 
+// --- Forman-Ricci curvature per edge (graph version) ------------------
+console.log("\n-- Forman-Ricci curvature per edge (graph version) --");
+const FR = formanRicci(M, A);
+console.log(`  formula: F(e=(u,v)) = 4 - deg(u) - deg(v)`);
+console.log(`  mean F = ${FR.mean.toFixed(4)}    histogram of values:`);
+for (const [val, count] of FR.histogram) {
+  const bar = "#".repeat(Math.min(60, Math.round(count/2)));
+  console.log(`     F = ${String(val).padStart(4)}  count=${String(count).padStart(3)}  ${bar}`);
+}
+console.log(`  degree distribution per shell:`);
+for (const s of A.shells) {
+  const degs = s.vertexIds.map((id) => FR.degree[id]);
+  const minD = Math.min(...degs), maxD = Math.max(...degs);
+  console.log(`     ${s.name}  r=${s.r.toFixed(3)}  count=${s.count}   deg in [${minD}, ${maxD}]`);
+}
+
+// --- closed walks  tr(A^k)  -------------------------------------------
+console.log("\n-- closed walks  tr(A^k)  on primal (63x63) and dual (64x64) --");
+const CW = closedWalks(M, A, 8);
+const fmt = (n) => String(n).padStart(11);
+console.log("        k= " + CW.primal.map((r) => String(r.k).padStart(11)).join(" "));
+console.log("  primal:  " + CW.primal.map((r) => fmt(r.trace)).join(" "));
+console.log("    dual:  " + CW.dual.map((r) => fmt(r.trace)).join(" "));
+const tr2 = CW.primal[1].trace, tr3 = CW.primal[2].trace, atlasE = 2 * A.edges.length;
+const triangles_count = tr3 / 6;
+console.log(`  tr(A^2) primal = 2|E| ?      ${tr2} vs ${atlasE}            ${okIcon(tr2 === atlasE)}`);
+console.log(`  tr(A^3) primal / 6 = #triangles? ${tr3}/6 = ${triangles_count} vs 256 ${okIcon(triangles_count === 256)}`);
+const oddDual = CW.dual.filter((r) => r.k % 2 === 1).every((r) => r.trace === 0);
+console.log(`  dual graph bipartite signature (tr(A^k)=0 for all odd k)?  ${okIcon(oddDual)}`);
+
+// --- O_h orbits on dual edges -----------------------------------------
+console.log("\n-- O_h orbits on the 144 dual edges --");
+const DO = dualEdgeOrbits(M, A);
+console.log(`  ${DO.length} orbit(s) of sizes ${JSON.stringify(DO.map((o) => o.size))}    (total ${DO.reduce((s, o) => s + o.size, 0)})`);
+
+// --- bipartite check (already above) ----------------------------------
+
 // ---- export JSON -----------------------------------------------------
 const out = {
   generated_at: new Date().toISOString(),
@@ -110,6 +148,10 @@ const out = {
   hom_g: HG,
   cycle_space_irreps_H1_dual: { chars: CYC.chars, multiplicities: Object.fromEntries(OH_IRREP_NAMES.map((n, i) => [n, CYC.mults[i]])), formatted: CYC.formatted },
   shell_ratios_phi: SR,
+  forman_ricci: { mean: FR.mean, histogram: FR.histogram },
+  closed_walks: CW,
+  dual_edge_oh_orbits: { count: DO.length, sizes: DO.map((o) => o.size) },
+  bipartite_dual: { pp: edgesPP, mm: edgesMM, pm: edgesPM, is_bipartite: bipartiteOk },
 };
 writeFileSync(join(here, "tetra64-foundations.json"), JSON.stringify(out, null, 2));
 console.log("\nwrote tetra64/tetra64-foundations.json");

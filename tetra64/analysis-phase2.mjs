@@ -268,6 +268,108 @@ export function dualCycleSpaceIrreps(M, A) {
 }
 
 // ========================================================================
+//  Forman-Ricci curvature per edge (graph version)
+//
+//  Simple combinatorial form for an unweighted graph:
+//     F(e=(u,v)) = 4 - deg(u) - deg(v)
+//  cf. Sreejith-Forman 2016, the "augmented" Forman curvature for graphs.
+//  This is a graph-level approximation of the full Forman 2003 cell-complex
+//  formula; sufficient for a structural "gravity-readout" diagnostic.
+// ========================================================================
+export function formanRicci(M, A) {
+  const vmap = new Map(A.vertices.map((v, i) => [k6(v.pos), i]));
+  const degree = new Array(A.vertices.length).fill(0);
+  for (const e of A.edges) {
+    degree[vmap.get(k6(e.a))]++;
+    degree[vmap.get(k6(e.b))]++;
+  }
+  const F = A.edges.map((e, idx) => {
+    const a = vmap.get(k6(e.a)), b = vmap.get(k6(e.b));
+    return { edgeId: idx, deg_u: degree[a], deg_v: degree[b], F: 4 - degree[a] - degree[b] };
+  });
+  const hist = new Map();
+  for (const f of F) hist.set(f.F, (hist.get(f.F) || 0) + 1);
+  const histArr = [...hist.entries()].sort((a, b) => a[0] - b[0]);
+  const mean = F.reduce((s, f) => s + f.F, 0) / F.length;
+  return { F, degree, histogram: histArr, mean };
+}
+
+// ========================================================================
+//  Closed walks  tr(A^k)  for primal 1-skeleton and dual graph
+// ========================================================================
+function matmul(A, B, n) {
+  const C = Array.from({ length: n }, () => new Array(n).fill(0));
+  for (let i = 0; i < n; i++) for (let k = 0; k < n; k++) {
+    if (A[i][k] === 0) continue;
+    const aik = A[i][k];
+    for (let j = 0; j < n; j++) C[i][j] += aik * B[k][j];
+  }
+  return C;
+}
+function trace(M) { let t = 0; for (let i = 0; i < M.length; i++) t += M[i][i]; return t; }
+
+export function closedWalks(M, A, kMax = 8) {
+  // ----- primal adjacency (63 x 63) -----
+  const vmap = new Map(A.vertices.map((v, i) => [k6(v.pos), i]));
+  const V = A.vertices.length;
+  const Ap = Array.from({ length: V }, () => new Array(V).fill(0));
+  for (const e of A.edges) {
+    const a = vmap.get(k6(e.a)), b = vmap.get(k6(e.b));
+    Ap[a][b] = 1; Ap[b][a] = 1;
+  }
+  // ----- dual adjacency (64 x 64) -----
+  const T = M.tetrahedra.length;
+  const Ad = Array.from({ length: T }, () => new Array(T).fill(0));
+  for (const [i, j] of A.dualGraphs.edge.pairs) { Ad[i][j] = 1; Ad[j][i] = 1; }
+
+  function spectrumTrace(Adj, n, kMax) {
+    const out = [];
+    let Ak = Adj.map((r) => r.slice());
+    out.push({ k: 1, trace: trace(Ak) });
+    for (let k = 2; k <= kMax; k++) {
+      Ak = matmul(Ak, Adj, n);
+      out.push({ k, trace: trace(Ak) });
+    }
+    return out;
+  }
+  return {
+    primal: spectrumTrace(Ap, V, kMax),
+    dual:   spectrumTrace(Ad, T, kMax),
+  };
+}
+
+// ========================================================================
+//  O_h orbits on dual edges (each orbit = a "type" of dual edge)
+// ========================================================================
+export function dualEdgeOrbits(M, A) {
+  const G = buildOh();
+  const dualPairs = A.dualGraphs.edge.pairs;
+  const tetraKey = (t) => t.vertices.map(k6).sort().join("/");
+  const tetraKeyToId = new Map(M.tetrahedra.map((t, i) => [tetraKey(t), i]));
+  const dualKey = (i, j) => i < j ? `${i}|${j}` : `${j}|${i}`;
+  const dualKeyToIdx = new Map(dualPairs.map((p, idx) => [dualKey(p[0], p[1]), idx]));
+  // precompute image of each tetra under each g for speed
+  const tetraImage = G.map((g) => M.tetrahedra.map((t) =>
+    tetraKeyToId.get(t.vertices.map((v) => applyG(g, v)).map(k6).sort().join("/"))
+  ));
+  const visited = new Array(dualPairs.length).fill(false);
+  const orbits = [];
+  for (let idx = 0; idx < dualPairs.length; idx++) {
+    if (visited[idx]) continue;
+    const orbit = [idx];
+    visited[idx] = true;
+    for (let gi = 0; gi < G.length; gi++) {
+      const [i, j] = dualPairs[idx];
+      const ii = tetraImage[gi][i], jj = tetraImage[gi][j];
+      const k = dualKeyToIdx.get(dualKey(ii, jj));
+      if (k !== undefined && !visited[k]) { visited[k] = true; orbit.push(k); }
+    }
+    orbits.push(orbit);
+  }
+  return orbits.map((o, i) => ({ orbit: i, size: o.length, dualEdgeIds: o }));
+}
+
+// ========================================================================
 //  Shell-ratio diagnostic vs phi
 // ========================================================================
 export function shellRatiosPhi(A) {
