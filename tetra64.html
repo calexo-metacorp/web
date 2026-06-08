@@ -70,6 +70,12 @@
     <label class="tog"><input type="checkbox" id="t-circ"><span class="sw" style="background:var(--circ)"></span>circulacion</label>
   </div>
 
+  <div class="section">Fundaciones (atlas v1.0)</div>
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="t-curv"><span class="sw" style="background:linear-gradient(90deg,#3d4ea6,#ff7a59)"></span>Forman-Ricci</label>
+    <label class="tog"><input type="checkbox" id="t-dorb"><span class="sw" style="background:linear-gradient(90deg,#6fdc8c,#c894ff)"></span>orbits duales (6)</label>
+  </div>
+
   <div id="shell-legend" style="margin-top:6px;display:none">
     <span class="shell-leg"><span class="sw dot" style="background:var(--S0)"></span>S0:1</span>
     <span class="shell-leg"><span class="sw dot" style="background:var(--S1)"></span>S1:12 (VE)</span>
@@ -178,7 +184,54 @@ function analyze(M){
     if(o && o.id>v.id) antipodal.push([v.id,o.id]);
   }
   const chir={plus:0,minus:0}; for(const t of M.tetrahedra)(t.chir>0?chir.plus++:chir.minus++);
-  return {verts, shells, edges, dualEdges, antipodal, chir};
+  // ---- Forman-Ricci  F(e) = 4 - deg(u) - deg(v) ----
+  const degree=new Array(verts.length).fill(0);
+  for(const e of edges){const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; degree[a]++;degree[b]++;}
+  const formanPerEdge=edges.map(e=>{const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; return 4-degree[a]-degree[b];});
+  const formanVals=[...new Set(formanPerEdge)].sort((a,b)=>a-b);
+  const formanIdxOf=new Map(formanVals.map((v,i)=>[v,i]));
+  // ---- O_h orbits on dual edges ----
+  const perms=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  const psgn=p=>{let s=1;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)if(p[i]>p[j])s=-s;return s;};
+  const G=[]; for(const pi of perms) for(const sx of[-1,1]) for(const sy of[-1,1]) for(const sz of[-1,1]) G.push({pi,s:[sx,sy,sz]});
+  const applyOh=(g,v)=>[g.s[0]*v[g.pi[0]],g.s[1]*v[g.pi[1]],g.s[2]*v[g.pi[2]]];
+  const tkey=t=>t.vertices.map(k6).sort().join("/");
+  const tkeyToId=new Map(M.tetrahedra.map((t,i)=>[tkey(t),i]));
+  const dKey=(i,j)=>i<j?i+"|"+j:j+"|"+i;
+  const dKeyToIdx=new Map(dualEdges.map((p,idx)=>[dKey(p[0],p[1]),idx]));
+  const tImage=G.map(g=>M.tetrahedra.map(t=>tkeyToId.get(t.vertices.map(v=>applyOh(g,v)).map(k6).sort().join("/"))));
+  const visited=new Array(dualEdges.length).fill(false);
+  const dualOrbitOf=new Array(dualEdges.length).fill(-1);
+  const dualOrbitSizes=[];
+  for(let idx=0;idx<dualEdges.length;idx++){
+    if(visited[idx])continue;
+    const orbId=dualOrbitSizes.length; let sz=1;
+    visited[idx]=true; dualOrbitOf[idx]=orbId;
+    for(let gi=0;gi<G.length;gi++){
+      const[i,j]=dualEdges[idx];
+      const ii=tImage[gi][i],jj=tImage[gi][j];
+      const k=dKeyToIdx.get(dKey(ii,jj));
+      if(k!==undefined&&!visited[k]){visited[k]=true; dualOrbitOf[k]=orbId; sz++;}
+    }
+    dualOrbitSizes.push(sz);
+  }
+  // ---- closed walks tr(A^k) for k=1..6 (cheap; bigger k overflows readability) ----
+  function spectrumTrace(adj,n,kMax){
+    let Ak=adj.map(r=>r.slice()); const out=[trace(Ak)];
+    for(let k=2;k<=kMax;k++){Ak=matmul(Ak,adj,n); out.push(trace(Ak));} return out;
+  }
+  function matmul(A,B,n){const C=Array.from({length:n},()=>new Array(n).fill(0));
+    for(let i=0;i<n;i++)for(let k=0;k<n;k++){if(!A[i][k])continue;const aik=A[i][k];for(let j=0;j<n;j++)C[i][j]+=aik*B[k][j];} return C;}
+  function trace(M){let t=0;for(let i=0;i<M.length;i++)t+=M[i][i];return t;}
+  const V=verts.length, T=M.tetrahedra.length;
+  const Ap=Array.from({length:V},()=>new Array(V).fill(0));
+  for(const e of edges){const a=vmap.get(k6(e.a)).id,b=vmap.get(k6(e.b)).id; Ap[a][b]=1; Ap[b][a]=1;}
+  const Ad=Array.from({length:T},()=>new Array(T).fill(0));
+  for(const[i,j] of dualEdges){Ad[i][j]=1;Ad[j][i]=1;}
+  const walksPrimal=spectrumTrace(Ap,V,6), walksDual=spectrumTrace(Ad,T,6);
+  return {verts, shells, edges, dualEdges, antipodal, chir,
+          formanPerEdge, formanVals, formanIdxOf, degree,
+          dualOrbitOf, dualOrbitSizes, walksPrimal, walksDual};
 }
 
 const MODEL=build(), A=analyze(MODEL);
@@ -217,6 +270,14 @@ const FACTS_GROUPED=[
   ["1-skeleton homology",[
     ["ker(d1^T) = 178",(A.edges.length-A.verts.length+1)===178?"PASS":"FAIL"],
     ["= |E| - |V| + c","240 - 63 + 1"],
+  ]],
+  ["foundations (atlas v1.0)",[
+    ["256 triangles (tr(A^3)/6)",A.walksPrimal[2]/6===256?"PASS":"FAIL"],
+    ["tr(A^2) primal = 2|E|",A.walksPrimal[1]===2*A.edges.length?"PASS":"FAIL"],
+    ["dual bipartite (odd tr(A^k)=0)",[1,3,5].every(k=>A.walksDual[k-1]===0)?"PASS":"FAIL"],
+    ["+/- bipartition dual",(()=>{let pp=0,mm=0;for(const[i,j]of A.dualEdges){const ci=MODEL.tetrahedra[i].chir,cj=MODEL.tetrahedra[j].chir;if(ci>0&&cj>0)pp++;else if(ci<0&&cj<0)mm++;}return pp===0&&mm===0;})()?"PASS":"FAIL"],
+    ["F-Ricci values","6 distintos: "+A.formanVals.join(", ")],
+    ["O_h orbits duales","6: "+A.dualOrbitSizes.join(", ")],
   ]],
 ];
 
@@ -291,15 +352,21 @@ function frame(){
     solid:t_solid.checked,
     chir:t_chir.checked, shell:t_shell.checked, cent:t_cent.checked,
     edges:t_edges.checked, dual:t_dual.checked, anti:t_anti.checked, circ:t_circ.checked,
+    curv:t_curv.checked, dorb:t_dorb.checked,
   };
   document.getElementById("shell-legend").style.display = show.shell ? "block" : "none";
 
-  // ---- 240 bulk edges (drawn first, faint) ----
-  if(show.edges){
-    for(const e of A.edges){
+  // ---- 240 bulk edges (drawn first, faint, optionally coloured by Forman-Ricci) ----
+  // F-Ricci palette across the 6 distinct values  (cold = more negative, warm = less negative)
+  const F_PAL = ["#3d4ea6","#4a87c8","#46c6c6","#8fd07e","#f0b450","#ff7a59"];
+  if(show.edges || show.curv){
+    for(let ei=0; ei<A.edges.length; ei++){
+      const e=A.edges[ei];
       const pa=project(e.a), pb=project(e.b), z=(pa.z+pb.z)/2 - 0.01;
+      const col = show.curv ? F_PAL[A.formanIdxOf.get(A.formanPerEdge[ei])] : "rgba(63,71,90,0.55)";
+      const lw  = show.curv ? 1.0 : 0.5;
       items.push({z,draw(){
-        ctx.strokeStyle="rgba(63,71,90,0.55)";ctx.lineWidth=0.5;
+        ctx.strokeStyle=col;ctx.lineWidth=lw;
         ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
       }});
     }
@@ -346,13 +413,17 @@ function frame(){
     }
   }
 
-  // ---- dual graph (edge-sharing, 144 lines between tetra centroids) ----
+  // ---- dual graph (edge-sharing, 144 lines between tetra centroids; optionally coloured by O_h orbit) ----
+  const O_PAL = ["#6fdc8c","#c894ff","#ff7a59","#ffd86b","#5ec0ff","#ff6fb5"];
   if(show.dual){
-    for(const [i,j] of A.dualEdges){
+    for(let ei=0; ei<A.dualEdges.length; ei++){
+      const [i,j]=A.dualEdges[ei];
       const ca=MODEL.tetrahedra[i].centroid, cb=MODEL.tetrahedra[j].centroid;
       const pa=project(ca), pb=project(cb), z=(pa.z+pb.z)/2;
+      const col = show.dorb ? O_PAL[A.dualOrbitOf[ei] % O_PAL.length] : "rgba(111,220,140,0.55)";
+      const lw  = show.dorb ? 1.1 : 0.7;
       items.push({z,draw(){
-        ctx.strokeStyle="rgba(111,220,140,0.55)";ctx.lineWidth=0.7;
+        ctx.strokeStyle=col;ctx.lineWidth=lw;
         ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
       }});
     }
@@ -492,7 +563,8 @@ const t_tet=document.getElementById("t-tet"), t_nuc=document.getElementById("t-n
       t_chir=document.getElementById("t-chir"), t_shell=document.getElementById("t-shell"),
       t_cent=document.getElementById("t-cent"), t_edges=document.getElementById("t-edges"),
       t_dual=document.getElementById("t-dual"), t_anti=document.getElementById("t-anti"),
-      t_circ=document.getElementById("t-circ");
+      t_circ=document.getElementById("t-circ"),
+      t_curv=document.getElementById("t-curv"), t_dorb=document.getElementById("t-dorb");
 t_spin.addEventListener("change",()=>spin=t_spin.checked);
 
 resize();frame();
